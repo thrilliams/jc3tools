@@ -34,11 +34,28 @@ interface ExportTextureMetadata {
 	};
 }
 
+interface ExportTextureReturn {
+	/**
+	 * a buffer containing the exported image data
+	 */
+	buffer: Buffer;
+	/**
+	 * some information about the exported image
+	 */
+	metadata: ExportTextureMetadata;
+}
+
+/**
+ * parses a dds file into an image buffer and metadata object
+ * @param ddscTextureFile path the ddsc file you want to export
+ * @param format the image format to export, defaults to png
+ * @param hmddscFile if the ddsc has an associated hmddsc file, pass it here
+ */
 export async function exportTextureFile(
 	ddscTextureFile: string,
 	format: 'dds' | 'png' = 'png',
 	hmddscFile?: string
-) {
+): Promise<ExportTextureReturn> {
 	const haveHMDDSCFile = hmddscFile !== undefined && (await exists(hmddscFile));
 	const textureFile = await Deno.readFile(ddscTextureFile);
 	const input = new Buffer(textureFile);
