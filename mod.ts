@@ -1,1 +1,1 @@
-export { exportTextureFile } from './src/converters/texture.ts';
+export { exportTextureFile } from './src/converters/exportTextureFile.ts';
