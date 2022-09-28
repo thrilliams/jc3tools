@@ -1,4 +1,4 @@
-import { Endian, Buffer, Uint32, Uint16, Uint8 } from '../deps.ts';
+import { Buffer, Endian, Uint16, Uint32, Uint8 } from '../deps.ts';
 import { reverseBytes } from '../util.ts';
 
 const SIGNATURE = 0x58545641; // 'AVTX'

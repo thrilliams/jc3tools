@@ -1,6 +1,6 @@
-import { PixelFormatFlags } from './PixelFormatFlags.ts';
+import { Buffer, Endian, Uint32 } from '../../deps.ts';
 import { FileFormat } from './FileFormat.ts';
-import { Endian, Buffer, Uint32 } from '../../deps.ts';
+import { PixelFormatFlags } from './PixelFormatFlags.ts';
 
 export class PixelFormat {
 	size!: number;

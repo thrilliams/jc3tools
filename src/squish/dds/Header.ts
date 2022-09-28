@@ -1,6 +1,6 @@
-import { Endian, Buffer, Uint32, Int32, writeFull, readFull } from '../../deps.ts';
-import { PixelFormat } from './PixelFormat.ts';
+import { Buffer, Endian, Int32, readFull, Uint32, writeFull } from '../../deps.ts';
 import { HeaderFlags } from './HeaderFlags.ts';
+import { PixelFormat } from './PixelFormat.ts';
 
 interface ConstructorOptions {
 	pixelFormat?: PixelFormat;
