@@ -71,7 +71,6 @@ export class Header {
 
 	async deserialize(input: Buffer, endian: Endian) {
 		this.size = await Uint32[endian].readFrom(input);
-		// assuming this is a byte flag 🤞
 		this.flags = await Uint32[endian].readFrom(input);
 		this.height = await Int32[endian].readFrom(input);
 		this.width = await Int32[endian].readFrom(input);
@@ -80,7 +79,7 @@ export class Header {
 		this.mipMapCount = await Uint32[endian].readFrom(input);
 		// there's a chance this doesn't error when it should
 		this.reserved1 = await readFull(input, this.reserved1);
-		this.pixelFormat.deserialize(input, endian);
+		await this.pixelFormat.deserialize(input, endian);
 		this.surfaceFlags = await Uint32[endian].readFrom(input);
 		this.cubemapFlags = await Uint32[endian].readFrom(input);
 		// there's a chance this doesn't error when it should
