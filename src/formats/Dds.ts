@@ -9,7 +9,7 @@ import { PixelFormat } from './dds/PixelFormat.ts';
 const SIGNATURE = 0x20534444;
 const DX10_FOURCC = 0x30315844;
 
-export class DDS {
+export class Dds {
 	static getPixelFormat(texture: TextureFile) {
 		// https://msdn.microsoft.com/en-us/library/windows/desktop/bb173059.aspx "DXGI_FORMAT enumeration"
 		// https://msdn.microsoft.com/en-us/library/windows/desktop/cc308051.aspx "Legacy Formats: Map Direct3D 9 Formats to Direct3D 10"
@@ -57,7 +57,7 @@ export class DDS {
 			pitchOrLinearSize: 0,
 			depth: texture.depth,
 			mipMapCount: 1, // always 1
-			pixelFormat: DDS.getPixelFormat(texture),
+			pixelFormat: Dds.getPixelFormat(texture),
 			surfaceFlags: 8 | 0x1000,
 			cubemapFlags: 0
 		});
@@ -66,7 +66,7 @@ export class DDS {
 	}
 
 	static async createFile(ddsc: Buffer, elementIndex: number, texture: TextureFile) {
-		const header = DDS.prepareHeader(elementIndex, texture);
+		const header = Dds.prepareHeader(elementIndex, texture);
 
 		const output = new Buffer();
 
