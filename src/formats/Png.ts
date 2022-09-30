@@ -5,9 +5,9 @@ import { readN, Buffer } from '../deps.ts';
 import { TextureFile } from '../formats/TextureFile.ts';
 import { Header } from './dds/Header.ts';
 import { PixelFormatFlags } from './dds/PixelFormatFlags.ts';
-import { DDS } from './DDS.ts';
+import { Dds } from './Dds.ts';
 
-export class PNG {
+export class Png {
 	static ddsBodyToRgba(body: Uint8Array, header: Header) {
 		if (
 			header.pixelFormat.flags === PixelFormatFlags.RGB ||
@@ -57,12 +57,12 @@ export class PNG {
 	}
 
 	static async createFile(ddsc: Buffer, elementIndex: number, texture: TextureFile) {
-		const header = DDS.prepareHeader(elementIndex, texture);
+		const header = Dds.prepareHeader(elementIndex, texture);
 
 		// seek(ddsc, texture.elements[elementIndex].offset);
 		const elementBytes = await readN(ddsc, texture.elements[elementIndex].size);
 
-		const rgba = await PNG.ddsBodyToRgba(elementBytes, header);
+		const rgba = await Png.ddsBodyToRgba(elementBytes, header);
 		const image = encode(rgba, header.width, header.height);
 
 		return new Buffer(image);
@@ -76,7 +76,7 @@ export class PNG {
 	) {
 		throw new Error('png imports not not implemented');
 
-		const header = DDS.prepareHeader(elementIndex, texture);
+		const header = Dds.prepareHeader(elementIndex, texture);
 
 		const image = decode(png.bytes());
 		if (image.height !== texture.height || image.width !== texture.width)

@@ -1,7 +1,8 @@
 import { Buffer, writeFull } from '../deps.ts';
-import { Element, TextureFile } from '../formats/TextureFile.ts';
-import { PNG } from '../squish/PNG.ts';
-import { DDS } from '../squish/DDS.ts';
+import { TextureFile } from '../formats/TextureFile.ts';
+import { Element } from '../formats/texture/Element.ts';
+import { Png } from '../formats/Png.ts';
+import { Dds } from '../formats/Dds.ts';
 import { seek } from '../util/seek.js';
 
 export interface TextureMetadata {
@@ -60,7 +61,7 @@ export async function exportTexture(ddsc: Buffer, format: 'dds' | 'png' = 'png',
 
 	const useHmddsc = texture.elements[biggestIndex].isExternal && hmddsc !== undefined;
 
-	const method = format === 'dds' ? DDS.createFile : PNG.createFile;
+	const method = format === 'dds' ? Dds.createFile : Png.createFile;
 	const targetDdsc = useHmddsc ? hmddsc : ddsc;
 
 	const buffer = await method(targetDdsc, biggestIndex, texture);
@@ -144,8 +145,8 @@ export async function importTexture(buffer: Buffer, metadata: TextureMetadata) {
 
 	let contents: Uint8Array[];
 	if (metadata.fileFormat === 'dds')
-		contents = await DDS.readFile(buffer, biggestIndex, texture, metadata.useHmddsc);
-	else contents = /* await */ PNG.readFile(buffer, biggestIndex, texture, metadata.useHmddsc);
+		contents = await Dds.readFile(buffer, biggestIndex, texture, metadata.useHmddsc);
+	else contents = /* await */ Png.readFile(buffer, biggestIndex, texture, metadata.useHmddsc);
 
 	const output = new Buffer();
 	await texture.serialize(output);
