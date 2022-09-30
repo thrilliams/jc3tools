@@ -2,7 +2,7 @@ import decodeDxt from 'https://esm.sh/decode-dxt@1.0.1';
 import { encode } from 'https://deno.land/x/pngs@0.1.1/mod.ts';
 
 import { readN, Buffer } from '../deps.ts';
-import { TextureFile } from '../formats/TextureFile.ts';
+import { Texture } from '../formats/Texture.ts';
 import { Header } from './dds/Header.ts';
 import { PixelFormatFlags } from './dds/PixelFormatFlags.ts';
 import { Dds } from './Dds.ts';
@@ -56,7 +56,7 @@ export class Png {
 		}
 	} */
 
-	static async createFile(ddsc: Buffer, elementIndex: number, texture: TextureFile) {
+	static async createFile(ddsc: Buffer, elementIndex: number, texture: Texture) {
 		const header = Dds.prepareHeader(elementIndex, texture);
 
 		// seek(ddsc, texture.elements[elementIndex].offset);
@@ -71,7 +71,7 @@ export class Png {
 	/* static readFile(
 		png: Buffer,
 		elementIndex: number,
-		texture: TextureFile,
+		texture: Texture,
 		useHmddsc: boolean
 	) {
 		const header = Dds.prepareHeader(elementIndex, texture);

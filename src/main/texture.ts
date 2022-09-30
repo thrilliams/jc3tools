@@ -1,5 +1,5 @@
 import { Buffer, writeFull } from '../deps.ts';
-import { TextureFile } from '../formats/TextureFile.ts';
+import { Texture } from '../formats/Texture.ts';
 import { Element } from '../formats/texture/Element.ts';
 import { Png } from '../formats/Png.ts';
 import { Dds } from '../formats/Dds.ts';
@@ -42,7 +42,7 @@ export interface TextureMetadata {
  * @returns a buffer containing the exported image data and some metadata about the exported image
  */
 export async function exportTexture(ddsc: Buffer, format: 'dds' | 'png' = 'png', hmddsc?: Buffer) {
-	const texture = new TextureFile();
+	const texture = new Texture();
 	await texture.deserialize(ddsc);
 
 	let biggestIndex = 0;
@@ -105,7 +105,7 @@ export async function exportTexture(ddsc: Buffer, format: 'dds' | 'png' = 'png',
  * @returns a ddsc buffer ("output") and, if necessary, an hmddsc buffer
  */
 export async function importTexture(buffer: Buffer, metadata: TextureMetadata) {
-	const texture = new TextureFile();
+	const texture = new Texture();
 
 	texture.unknown06 = metadata.header.unknown06;
 	texture.unknown1C = metadata.header.unknown1C;

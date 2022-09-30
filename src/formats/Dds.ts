@@ -1,5 +1,5 @@
 import { Buffer, readN, Uint32, writeFull } from '../deps.ts';
-import { TextureFile } from '../formats/TextureFile.ts';
+import { Texture } from '../formats/Texture.ts';
 import { seek } from '../util/seek.js';
 import { Header } from './dds/Header.ts';
 import { FileFormat } from './dds/FileFormat.ts';
@@ -10,7 +10,7 @@ const SIGNATURE = 0x20534444;
 const DX10_FOURCC = 0x30315844;
 
 export class Dds {
-	static getPixelFormat(texture: TextureFile) {
+	static getPixelFormat(texture: Texture) {
 		// https://msdn.microsoft.com/en-us/library/windows/desktop/bb173059.aspx "DXGI_FORMAT enumeration"
 		// https://msdn.microsoft.com/en-us/library/windows/desktop/cc308051.aspx "Legacy Formats: Map Direct3D 9 Formats to Direct3D 10"
 
@@ -41,7 +41,7 @@ export class Dds {
 		throw new Error('NotSupportedException');
 	}
 
-	static prepareHeader(elementIndex: number, texture: TextureFile) {
+	static prepareHeader(elementIndex: number, texture: Texture) {
 		let rank = 0;
 		for (let i = 0; i < texture.elements.length; i++) {
 			if (i === elementIndex) continue;
@@ -65,7 +65,7 @@ export class Dds {
 		return header;
 	}
 
-	static async createFile(ddsc: Buffer, elementIndex: number, texture: TextureFile) {
+	static async createFile(ddsc: Buffer, elementIndex: number, texture: Texture) {
 		const header = Dds.prepareHeader(elementIndex, texture);
 
 		const output = new Buffer();
@@ -92,12 +92,7 @@ export class Dds {
 		return output;
 	}
 
-	static async readFile(
-		dds: Buffer,
-		elementIndex: number,
-		texture: TextureFile,
-		useHmddsc: boolean
-	) {
+	static async readFile(dds: Buffer, elementIndex: number, texture: Texture, useHmddsc: boolean) {
 		let rank = 0;
 		for (let i = 0; i < texture.elements.length; i++) {
 			if (i === elementIndex) continue;

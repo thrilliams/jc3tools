@@ -5,7 +5,7 @@ import { Element } from './texture/Element.ts';
 const SIGNATURE = 0x58545641; // 'AVTX'
 const ELEMENT_COUNT = 8;
 
-export class TextureFile {
+export class Texture {
 	endian: Endian = 'le';
 	elements: Element[] = [];
 
