@@ -146,7 +146,10 @@ export async function importTexture(buffer: Buffer, metadata: TextureMetadata) {
 	let contents: Uint8Array[];
 	if (metadata.fileFormat === 'dds')
 		contents = await Dds.readFile(buffer, biggestIndex, texture, metadata.useHmddsc);
-	else contents = /* await */ Png.readFile(buffer, biggestIndex, texture, metadata.useHmddsc);
+	else {
+		throw new Error('png imports are not implemented (epic fail)');
+		// contents = Png.readFile(buffer, biggestIndex, texture, metadata.useHmddsc);
+	}
 
 	const output = new Buffer();
 	await texture.serialize(output);

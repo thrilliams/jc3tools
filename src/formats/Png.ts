@@ -1,5 +1,5 @@
-import { compress, decompress, flags } from 'https://esm.sh/dxt-js@0.0.3';
-import { encode, decode } from 'https://deno.land/x/pngs@0.1.1/mod.ts';
+import decodeDxt from 'https://esm.sh/decode-dxt@1.0.1';
+import { encode } from 'https://deno.land/x/pngs@0.1.1/mod.ts';
 
 import { readN, Buffer } from '../deps.ts';
 import { TextureFile } from '../formats/TextureFile.ts';
@@ -19,20 +19,20 @@ export class Png {
 			let format = '';
 			switch (header.pixelFormat.fourCC) {
 				case 0x31545844:
-					format = flags.DXT1;
+					format = 'dxt1';
 					break;
 				case 0x33545844:
-					format = flags.DXT3;
+					format = 'dxt3';
 					break;
 				case 0x35545844:
-					format = flags.DXT5;
+					format = 'dxt5';
 					break;
 			}
-			return decompress(new DataView(body.buffer), header.width, header.height, format);
+			return decodeDxt(new DataView(body.buffer), header.width, header.height, format);
 		}
 	}
 
-	static rgbaToDdsBody(body: Uint8Array, header: Header) {
+	/* static rgbaToDdsBody(body: Uint8Array, header: Header) {
 		if (
 			header.pixelFormat.flags === PixelFormatFlags.RGB ||
 			header.pixelFormat.flags === PixelFormatFlags.RGBA
@@ -54,7 +54,7 @@ export class Png {
 			}
 			return compress(new DataView(body.buffer), header.width, header.height, format);
 		}
-	}
+	} */
 
 	static async createFile(ddsc: Buffer, elementIndex: number, texture: TextureFile) {
 		const header = Dds.prepareHeader(elementIndex, texture);
@@ -68,14 +68,12 @@ export class Png {
 		return new Buffer(image);
 	}
 
-	static /* async */ readFile(
+	/* static readFile(
 		png: Buffer,
 		elementIndex: number,
 		texture: TextureFile,
 		useHmddsc: boolean
 	) {
-		throw new Error('png imports not not implemented');
-
 		const header = Dds.prepareHeader(elementIndex, texture);
 
 		const image = decode(png.bytes());
@@ -87,5 +85,5 @@ export class Png {
 		contents[elementIndex] = this.rgbaToDdsBody(image.image, header);
 
 		return contents;
-	}
+	} */
 }
