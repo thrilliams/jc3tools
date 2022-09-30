@@ -1,12 +1,12 @@
 import { Buffer, Endian, Uint16, Uint32, Uint8 } from '../deps.ts';
-import { reverseBytes } from '../util.ts';
+import { reverseBytes } from '../util/reverseBytes.ts';
 
 const SIGNATURE = 0x58545641; // 'AVTX'
 const ELEMENT_COUNT = 8;
 
 export class TextureFile {
-	endian!: Endian;
-	elements!: Element[];
+	endian: Endian = 'le';
+	elements: Element[] = [];
 
 	dimension!: number;
 	format!: number;
@@ -43,7 +43,7 @@ export class TextureFile {
 
 		// serialze elements
 		for (let i = 0; i < this.elements.length; i++)
-			await this.elements[i].write(output, this.endian);
+			await this.elements[i].serialize(output, this.endian);
 	}
 
 	async deserialize(input: Buffer) {
@@ -77,7 +77,7 @@ export class TextureFile {
 		const elements: Element[] = [];
 		for (let i = 0; i < ELEMENT_COUNT; i++) {
 			const element = new Element();
-			await element.read(input, endian);
+			await element.deserialize(input, endian);
 			elements.push(element);
 		}
 
@@ -123,7 +123,7 @@ export class Element {
 	unknownA!: number;
 	unknown8!: number;
 
-	async read(input: Buffer, endian: Endian) {
+	async deserialize(input: Buffer, endian: Endian) {
 		this.offset = await Uint32[endian].readFrom(input);
 		this.size = await Uint32[endian].readFrom(input);
 		this.unknown8 = await Uint16[endian].readFrom(input);
@@ -131,7 +131,7 @@ export class Element {
 		this.isExternal = (await Uint8.readFrom(input)) > 0;
 	}
 
-	async write(output: Buffer, endian: Endian) {
+	async serialize(output: Buffer, endian: Endian) {
 		await Uint32[endian].writeTo(output, this.offset);
 		await Uint32[endian].writeTo(output, this.size);
 		await Uint16[endian].writeTo(output, this.unknown8);
